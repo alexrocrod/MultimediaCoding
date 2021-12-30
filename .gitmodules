@@ -1,0 +1,6 @@
+[submodule "OnlineStuff/ImageLBG"]
+	path = OnlineStuff/ImageLBG
+	url = https://github.com/aashishkr/Image-Compression-Using-Vector-Quantization-with-LBG-algorithm.git
+[submodule "OnlineStuff/PythonLBG"]
+	path = OnlineStuff/PythonLBG
+	url = https://github.com/droidadroit/LBG.git

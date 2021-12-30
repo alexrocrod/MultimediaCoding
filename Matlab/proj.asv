@@ -35,43 +35,17 @@ info = audioinfo(filename);
 fprintf('Sampling frequency:  F = %d [Hz] \n',F); 
 fprintf('Resolution:          nbits = %d [bit] \n',info.BitsPerSample);
 
-%% Upscale to 16 bit/sample
-
 if info.BitsPerSample == 8
-    disp('Upscaled to 16 bit/sample')
     x = int16(x) - 127;
 end
 
 %% Convert to mono (needed ??)
 
 if info.NumChannels == 2
-    disp('Converted to Mono')
     xmono = int16(mean(x,2));
 end
 
-%% Code
-
-
-
-
-
-
-
-
-%% Compare 
-
-
-
-
-
-
-
-
-%% Decode
-
-
-
-
+%% 
 
 
 
