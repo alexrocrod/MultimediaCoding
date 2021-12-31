@@ -6,12 +6,12 @@ disp('https://it.mathworks.com/matlabcentral/answers/53147-give-me-a-detailed-co
 
 %% 
 vecs = ones(10,10);
-b = vqlbg(vecs,20)
+c = vqlbg(vecs,20)
 
 
 %%
 
-function b=vqlbg(v,k) 
+function c=vqlbg(v,k) 
     % VQLBG Vector quantization using the Linde-Buzo-Gray algorithm 
     %
     % Inputs:
@@ -68,7 +68,7 @@ function b=vqlbg(v,k)
         % The centroids of the vectors are found using the mean function. 
         for j=1:cols 
             if find(i==j)
-                ~isempty(c);
+%                 ~isempty(c);
                 c(:,j)=mean(v(:,(i==j)),2); 
             end 
         end 
