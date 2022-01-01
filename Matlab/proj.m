@@ -27,7 +27,7 @@ else
     return;
 end
 
-Ks = 2.^(Rs.*L)
+Ks = 2.^(Rs.*L);
 
 %% Load Audio
 filename = 'Audio\70stereo.wav';
@@ -59,12 +59,11 @@ R = Rs(idx);
 epsilon = 0.001;
 
 % Training set ??
+N = 1000*K;
 T = rand(N,K); %% for now
 
 % Initial Codebook
 y = split(T,epsilon);
-
-
 
 
 
@@ -92,14 +91,16 @@ y = split(T,epsilon);
 %% Functions
 
 function b = split(T,epsilon)
-    N,K = size(T);
-    y1 = mean(T);
+    [~,K] = size(T);
+%     y1 = mean(T);
+    y1 = 1:K;
     b = y1;
-    while length(b) < K
-        bnew = zeros(length(b)*2,N);
-        for i=1:length(b)
-            bnew = [ bnew ; (1-epsilon)*b(i) ; (1+epsilon)*b(i)];
-        end
+    m = 1;
+    while m < K
+        n=min(m,K-m);
+        m=m+n;
+%         bnew = [b(1:n,:)+epsilon(ones(n,1),:); b(1:n,:)-epsilon(ones(n,1),:); b(n+1:m-n,:)]
+        bnew = [b(1:n,:)+epsilon(ones(n,1),:); b(1:n,:)-epsilon(ones(n,1),:)];
         b = LBG(bnew,epsilon);
     end
 end
