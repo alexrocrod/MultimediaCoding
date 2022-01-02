@@ -32,41 +32,47 @@ Ks = 2.^(Rs.*L);
 nbit = 16;
 
 
-%% Load Audio
-[x,F,Nx,maxX] = loadaudio('Audio\64mono.wav');
 
 %% Train
+% Load Audio
+Naud = 49; % 49, 54, 58, 64, 70
+[x,F,Nx,maxX] = loadaudio(Naud);
+
 iL = 2;
 K = Ks(iL);
 R = Rs(iL);
-
 epsilon = 1e-2;
 
-% Training set 
-N = 1000*K;
-T = zeros(N,L); %% for now
-
-idxT = 1;
-deltai = N*L/2;
-for i = Nx/2-deltai:L:Nx/2+deltai-1
-    for j = 1:L
-        T(idxT,j) = x(i+j-1); 
+savefile = ['CodeBooks\cb_' num2str(L)  '_' num2str(R) '_' num2str(epsilon) '_' num2str(Naud) '.mat'];
+if isfile(savefile)
+    disp('Codebook loaded from file.')
+    load(savefile)
+else
+    % Training set 
+    N = 1000*K;
+    T = zeros(N,L); %% for now
+    
+    idxT = 1;
+    deltai = N*L/2;
+    for i = Nx/2-deltai:L:Nx/2+deltai-1
+        for j = 1:L
+            T(idxT,j) = x(i+j-1); 
+        end
+        idxT = idxT + 1;
     end
-    idxT = idxT + 1;
+    
+    % initial codebook
+    tic
+    y = split(T,epsilon,K,maxX,L)
+    toc    
+    save(savefile,'y')
+    
+    plot(T(:,1),T(:,2),'g.')
+    hold on
+    plot(y(:,1),y(:,2),'r*')
 end
-
-% initial codebook
-tic
-y = split(T,epsilon,K,maxX,L)
-toc
-
-plot(T(:,1),T(:,2),'g.')
-hold on
-plot(y(:,1),y(:,2),'r*')
-
 %% Encode
-[x,F,Nx,maxX] = loadaudio('Audio\70mono.wav');
-
+[x,F,Nx,maxX] = loadaudio(70);
 
 x1 = zeros(Nx/L,L); %% for now
 
@@ -134,13 +140,10 @@ function b = LBG(T,b1,epsilon)
     y = b1;
     [N,~] = size(T);
     [K,~] = size(y);
-    
-
     D = inf;
-    
     iters = 0;
     while true 
-        iters = iters+1
+        iters = iters+1;
         % Optimal Partition
         address = zeros(N,1);
         cards = zeros(K,1);
@@ -185,6 +188,7 @@ function b = LBG(T,b1,epsilon)
     end
 %     cards
     b = y;
+    fprintf('Ended LBG routine: size=%d, D=%d, iters=%d\n', K, D, iters)
 end
 
 
@@ -210,7 +214,8 @@ function [x2,address] = quantizer(x1,b,L,K)
       
 end
 
-function [x,F] = loadaudio(filename)
+function [x,F,Nx,maxX] = loadaudio(Naud)
+    filename = ['Audio\' num2str(Naud)  'mono.wav'];
     info = audioinfo(filename);
     [x,F] = audioread(filename,'native') ; 
     fprintf('Sampling frequency:  F = %d [Hz] \n',F); 
