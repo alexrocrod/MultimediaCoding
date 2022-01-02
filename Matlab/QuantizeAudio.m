@@ -6,7 +6,7 @@
 clear all; close all;
 
 % filename = '70mono.wav';
-filename = 'DataSet/Audio/70mono.wav';
+filename = 'Audio/70mono.wav';
  
 info = audioinfo(filename);
 [x,F] = audioread(filename,'native') ;  % load the audio file il native format (integer)

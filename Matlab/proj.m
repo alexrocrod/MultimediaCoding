@@ -29,120 +29,206 @@ end
 
 Ks = 2.^(Rs.*L);
 
+nbit = 16;
+
+
 %% Load Audio
-filename = 'Audio\70stereo.wav';
+[x,F,Nx,maxX] = loadaudio('Audio\64mono.wav');
 
-info = audioinfo(filename);
-[x,F] = audioread(filename,'native') ; 
-fprintf('Sampling frequency:  F = %d [Hz] \n',F); 
-fprintf('Resolution:          nbits = %d [bit] \n',info.BitsPerSample);
+%% Train
+iL = 2;
+K = Ks(iL);
+R = Rs(iL);
 
-%% Upscale to 16 bit/sample
+epsilon = 1e-2;
 
-if info.BitsPerSample == 8
-    disp('Upscaled to 16 bit/sample')
-    x = int16(x) - 127;
-end
-
-%% Convert to mono (needed ??)
-
-if info.NumChannels == 2
-    disp('Converted to Mono')
-    xmono = int16(mean(x,2));
-end
-
-%% Code
-idx = 1;
-K = Ks(idx);
-R = Rs(idx);
-
-epsilon = 0.001;
-
-% Training set ??
+% Training set 
 N = 1000*K;
-T = rand(N,K); %% for now
+T = zeros(N,L); %% for now
 
-% Initial Codebook
-y = split(T,epsilon);
+idxT = 1;
+deltai = N*L/2;
+for i = Nx/2-deltai:L:Nx/2+deltai-1
+    for j = 1:L
+        T(idxT,j) = x(i+j-1); 
+    end
+    idxT = idxT + 1;
+end
+
+% initial codebook
+tic
+y = split(T,epsilon,K,maxX,L)
+toc
+
+plot(T(:,1),T(:,2),'g.')
+hold on
+plot(y(:,1),y(:,2),'r*')
+
+%% Encode
+[x,F,Nx,maxX] = loadaudio('Audio\70mono.wav');
 
 
+x1 = zeros(Nx/L,L); %% for now
 
+idxT = 1;
+for i = 1:L:Nx
+    for j = 1:L
+        x1(idxT,j) = x(i+j-1); 
+    end
+    idxT = idxT + 1;
+end
 
+[x2,address] = quantizer(x1,y,L,K);
 
-%% Compare 
-
-
-
-% sound(single(x4)/(2^nbit),F); 
-% figure(3); plot(x4(152000:154000,:));
-% disp('Press any key to continue');
-% pause;
-% clear sound
+figure(2)
+plot(x1(:,1),x1(:,2),'g.')
+hold on
+plot(x2(:,1),x2(:,2),'r*')
 
 
 %% Decode
+x_end = int16(zeros(Nx,1)); 
 
+idxT = 1;
+for i = 1:L:Nx
+    for j = 1:L
+         x_end(i+j-1) = x2(idxT,j);
+    end
+    idxT = idxT + 1;
+end
 
+%% Compare 
 
+figure(3)
+plot(abs(x_end-x))
 
+sound(single(x)/(2^nbit),F); % original signal
+figure(4);
+plot(x(152000:154000,:),'g-');
+hold on
+disp('Press any key to continue');
+pause;
+clear sound % Added to stop sound playing
 
-
+sound(single(x_end)/(2^nbit),F); % original signal
+plot(x_end(152000:154000,:),'r-');
+disp('Press any key to continue');
+pause;
+clear sound % Added to stop sound playing
 
 %% Functions
 
-function b = split(T,epsilon)
-    [~,K] = size(T);
-%     y1 = mean(T);
-    y1 = 1:K;
+function b = split(T,epsilon,K,maxX,L)
+    y1 = randi([-maxX maxX],1,L);
     b = y1;
     m = 1;
     while m < K
-        n=min(m,K-m);
+        n=m;
         m=m+n;
-%         bnew = [b(1:n,:)+epsilon(ones(n,1),:); b(1:n,:)-epsilon(ones(n,1),:); b(n+1:m-n,:)]
         bnew = [b(1:n,:)+epsilon(ones(n,1),:); b(1:n,:)-epsilon(ones(n,1),:)];
-        b = LBG(bnew,epsilon);
+        b = LBG(T,bnew,epsilon);
     end
 end
 
-function b = LBG(b1,epsilon)
-    D = inf;
-    Dold = inf;
-    
+function b = LBG(T,b1,epsilon)
     y = b1;
-    while (Dold-D)/D < epsilon
+    [N,~] = size(T);
+    [K,~] = size(y);
+    
 
+    D = inf;
+    
+    iters = 0;
+    while true 
+        iters = iters+1
         % Optimal Partition
-        for i=1:K
-            part(i) = 0; %??
+        address = zeros(N,1);
+        cards = zeros(K,1);
+        for i=1:N
+            mindist = inf;
+            min_idx = 1;
+            for j = 1:K
+                dist = sqrt((T(i,:)-y(j,:)).^2);
+                if dist < mindist
+                    mindist = dist;
+                    min_idx = j;
+                end
+            end
+            cards(min_idx) = cards(min_idx) + 1;
+            address(i) = min_idx;
         end
+%         disp('partition done')
         
         % New Codebook
         for i=1:K
-            y(i) = sum(part(i))/length(part(i));
+            if cards(i) == 0 
+                [m,cell] = max(cards);
+                ys2 = T(address==cell,:);
+                y(i,:) = ys2(randi(m));
+            else                y(i,:) = sum(T(address==i,:))./cards(i);
+            end
         end
-        
+%         disp('codebook done')
+
         % Evaluate Distortion
         Dold = D;
         D = 0;
         for i=1:N 
-            D = D + norm(x-Q(x))^2;
+            D = D + norm(T(i,:)-y(address(i)))^2;
         end
         D = D/N;
+%         ola = abs((Dold-D)/D)
+        if abs((Dold-D)/D) < epsilon
+            break
+        end
             
     end
+%     cards
     b = y;
 end
 
 
+function [x2,address] = quantizer(x1,b,L,K)
+    N = length(x1(:,1));
+    x2 = zeros(N,L);
+    address = zeros(N,1);
+    cards = zeros(K,1);
+    for i=1:N
+        mindist = inf;
+        min_idx = 1;
+        for j = 1:K
+            dist = sqrt((x1(i,:)-b(j,:)).^2);
+            if dist < mindist
+                mindist = dist;
+                min_idx = j;
+            end
+        end
+        cards(min_idx) = cards(min_idx) + 1;
+        address(i) = min_idx;
+        x2(i,:) = b(min_idx,:);
+    end
+      
+end
 
-
-
-
-
-
-
-
-
-
+function [x,F] = loadaudio(filename)
+    info = audioinfo(filename);
+    [x,F] = audioread(filename,'native') ; 
+    fprintf('Sampling frequency:  F = %d [Hz] \n',F); 
+    fprintf('Resolution:          nbits = %d [bit] \n',info.BitsPerSample);
+    
+    % Upscale to 16 bit/sample
+    
+    if info.BitsPerSample == 8
+        disp('Upscaled to 16 bit/sample')
+        x = int16(x) - 127;
+    end
+    
+    % Convert to mono
+    if info.NumChannels == 2
+        disp('Converted to Mono')
+        x = int16(mean(x,2));
+    end
+    Nx = length(x);
+    maxX = max(x);
+end
 
