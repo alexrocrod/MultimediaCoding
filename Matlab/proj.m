@@ -16,7 +16,7 @@ clear all
 
 %% Parameters
 
-L = 2; % 2 or 4
+L = 4; % 2 or 4
 
 if L == 2
     Rs = [2, 4];
@@ -35,7 +35,7 @@ nbit = 16;
 
 %% Train
 % Load Audio
-Naud = 49; % 49, 54, 58, 64, 70
+Naud = 64; % 49, 54, 58, 64, 70
 [x,F,Nx,maxX] = loadaudio(Naud);
 
 iL = 2;
@@ -72,9 +72,12 @@ else
     plot(y(:,1),y(:,2),'r*')
 end
 %% Encode
-[x,F,Nx,maxX] = loadaudio(70);
-
-x1 = zeros(Nx/L,L); %% for now
+% [x,F,Nx,maxX] = loadaudio(70);
+[x,F,Nx,maxX] = loadaudio(1,'music\saynada.wav');
+x = x(round(0.25*Nx):round(0.30*Nx));
+Nx = length(x);
+maxX = max(x);
+x1 = zeros(round(Nx/L)+1,L); %% for now
 
 idxT = 1;
 for i = 1:L:Nx
@@ -83,9 +86,9 @@ for i = 1:L:Nx
     end
     idxT = idxT + 1;
 end
-
-[x2,address] = quantizer(x1,y,L,K);
-
+tic
+[x2,ads] = quantizer(x1,y,L,K);
+toc
 figure(2)
 plot(x1(:,1),x1(:,2),'g.')
 hold on
@@ -160,7 +163,6 @@ function b = LBG(T,b1,epsilon)
             cards(min_idx) = cards(min_idx) + 1;
             address(i) = min_idx;
         end
-%         disp('partition done')
         
         % New Codebook
         for i=1:K
@@ -171,7 +173,6 @@ function b = LBG(T,b1,epsilon)
             else                y(i,:) = sum(T(address==i,:))./cards(i);
             end
         end
-%         disp('codebook done')
 
         % Evaluate Distortion
         Dold = D;
@@ -180,13 +181,11 @@ function b = LBG(T,b1,epsilon)
             D = D + norm(T(i,:)-y(address(i)))^2;
         end
         D = D/N;
-%         ola = abs((Dold-D)/D)
         if abs((Dold-D)/D) < epsilon
             break
         end
             
     end
-%     cards
     b = y;
     fprintf('Ended LBG routine: size=%d, D=%d, iters=%d\n', K, D, iters)
 end
@@ -195,9 +194,10 @@ end
 function [x2,address] = quantizer(x1,b,L,K)
     N = length(x1(:,1));
     x2 = zeros(N,L);
-    address = zeros(N,1);
-    cards = zeros(K,1);
+    address = int16(zeros(N,1));
+    cards = int16(zeros(K,1));
     for i=1:N
+        i
         mindist = inf;
         min_idx = 1;
         for j = 1:K
@@ -214,8 +214,12 @@ function [x2,address] = quantizer(x1,b,L,K)
       
 end
 
-function [x,F,Nx,maxX] = loadaudio(Naud)
-    filename = ['Audio\' num2str(Naud)  'mono.wav'];
+function [x,F,Nx,maxX] = loadaudio(Naud,file)
+    if nargin < 2 
+        filename = ['Audio\' num2str(Naud)  'mono.wav'];
+    else
+        filename = file;
+    end
     info = audioinfo(filename);
     [x,F] = audioread(filename,'native') ; 
     fprintf('Sampling frequency:  F = %d [Hz] \n',F); 
