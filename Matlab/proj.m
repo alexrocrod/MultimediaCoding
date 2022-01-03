@@ -35,8 +35,18 @@ nbit = 16;
 
 %% Train
 % Load Audio
-Naud = 64; % 49, 54, 58, 64, 70
-[x,F,Nx,maxX] = loadaudio(Naud);
+% 1 audio file
+% Naud = 64; % 49, 54, 58, 64, 70
+% [x,F,Nx,maxX] = loadaudio(Naud);
+
+% All files together
+Naud = 100;
+[x,F,Nx,maxX] = loadAllAudio();
+
+% music
+% Naud = 200;
+% [x,F,Nx,maxX] = loadaudio(1,'music\saynada.wav');
+% x = x(round(0.25*Nx):round(0.30*Nx));
 
 iL = 2;
 K = Ks(iL);
@@ -54,7 +64,7 @@ else
     
     idxT = 1;
     deltai = N*L/2;
-    for i = Nx/2-deltai:L:Nx/2+deltai-1
+    for i = round(Nx/2-deltai):L:round(Nx/2+deltai-1)
         for j = 1:L
             T(idxT,j) = x(i+j-1); 
         end
@@ -63,8 +73,10 @@ else
     
     % initial codebook
     tic
-    y = split(T,epsilon,K,maxX,L)
-    toc    
+    y = split(T,epsilon,K,maxX,L);
+    toc   
+    fprintf('Codebook: \n')
+    disp(y)
     save(savefile,'y')
     
     plot(T(:,1),T(:,2),'g.')
@@ -72,12 +84,15 @@ else
     plot(y(:,1),y(:,2),'r*')
 end
 %% Encode
+% 1 audio file 
 % [x,F,Nx,maxX] = loadaudio(70);
-[x,F,Nx,maxX] = loadaudio(1,'music\saynada.wav');
-x = x(round(0.25*Nx):round(0.30*Nx));
-Nx = length(x);
-maxX = max(x);
-x1 = zeros(round(Nx/L)+1,L); %% for now
+% 1 music
+% [x,F,Nx,~] = loadaudio(1,'music\saynada.wav');
+% x = x(round(0.25*Nx):round(0.30*Nx));
+% 
+% Nx = length(x);
+% maxX = max(x);
+x1 = zeros(round(Nx/L),L);
 
 idxT = 1;
 for i = 1:L:Nx
@@ -154,7 +169,7 @@ function b = LBG(T,b1,epsilon)
             mindist = inf;
             min_idx = 1;
             for j = 1:K
-                dist = sqrt((T(i,:)-y(j,:)).^2);
+                dist = norm((T(i,:)-y(j,:)));
                 if dist < mindist
                     mindist = dist;
                     min_idx = j;
@@ -170,7 +185,8 @@ function b = LBG(T,b1,epsilon)
                 [m,cell] = max(cards);
                 ys2 = T(address==cell,:);
                 y(i,:) = ys2(randi(m));
-            else                y(i,:) = sum(T(address==i,:))./cards(i);
+            else                
+                y(i,:) = sum(T(address==i,:))./cards(i);
             end
         end
 
@@ -197,11 +213,13 @@ function [x2,address] = quantizer(x1,b,L,K)
     address = int16(zeros(N,1));
     cards = int16(zeros(K,1));
     for i=1:N
-        i
+        if mod(i,30000) == 0
+            fprintf('Quantizier on index %d/%d\n',i,N)
+        end
         mindist = inf;
         min_idx = 1;
         for j = 1:K
-            dist = sqrt((x1(i,:)-b(j,:)).^2);
+            dist = norm((x1(i,:)-b(j,:)));
             if dist < mindist
                 mindist = dist;
                 min_idx = j;
@@ -241,3 +259,13 @@ function [x,F,Nx,maxX] = loadaudio(Naud,file)
     maxX = max(x);
 end
 
+function [x,F,Nx,maxX]  = loadAllAudio()
+    Nauds = [54, 58, 64, 70];
+    [x,F,~,~] = loadaudio(49);
+    for Naud=Nauds
+        [xi,~,~,~] = loadaudio(Naud);
+        x = [x; xi];
+    end
+    Nx = length(x);
+    maxX = max(x);
+end
