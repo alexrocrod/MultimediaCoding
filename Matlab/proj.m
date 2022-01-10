@@ -16,8 +16,8 @@ clear all
 
 %% Parameters
 epsilon = 1e-2;
-L = 2; % 2 or 4
-iL = 1; % index to identify the rate selected
+L = 4; % 2 or 4
+iL = 2; % index to identify the rate selected
 
 if L == 2
     Rs = [2, 4];
