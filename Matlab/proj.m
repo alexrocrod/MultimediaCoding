@@ -105,8 +105,8 @@ end
 % maxX = max(x);
 
 %% Encode
+tic
 x1 = zeros(round(Nx/L),L);
-
 idxT = 1;
 for i = 1:L:Nx-L
     for j = 1:L
@@ -114,7 +114,7 @@ for i = 1:L:Nx-L
     end
     idxT = idxT + 1;
 end
-tic
+
 [x2,ads,D] = quantizer(x1,y,L,K);
 toc
 
@@ -245,7 +245,7 @@ function [x2,address, D] = quantizer(x1,b,L,K)
         x2(i,:) = b(min_idx,:);
         D = D + mindist;
     end
-    D = D/N;      
+    D = D/N/L;      
 end
 
 function [x,F,Nx,maxX] = loadaudio(Naud,file)
