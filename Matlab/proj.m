@@ -15,8 +15,9 @@ clear all
 % Various samples of voice and music
 
 %% Parameters
-
+epsilon = 1e-2;
 L = 2; % 2 or 4
+iL = 1; % index to identify the rate selected
 
 if L == 2
     Rs = [2, 4];
@@ -52,14 +53,12 @@ Naud = 100;
 % x = x(round(0.25*Nx):round(0.30*Nx));
 
 % music3
-% Naud = 210;
+% Naud = 220;
 % [x,F,Nx,maxX] = loadaudio(1,'music\WaitingOnAWar.wav');
 
 %% Train
-iL = 2;
 K = Ks(iL);
 R = Rs(iL);
-epsilon = 1e-2;
 
 savefile = ['CodeBooks\cb_' num2str(L)  '_' num2str(R) '_' num2str(epsilon) '_' num2str(Naud) '.mat'];
 if isfile(savefile)
@@ -83,26 +82,33 @@ else
     tic
     y = split(T,epsilon,K,maxX,L);
     toc   
-    fprintf('Codebook: \n')
-    disp(y)
+%     fprintf('Codebook: \n')
+%     disp(y)
     save(savefile,'y')
     
     plot(T(:,1),T(:,2),'g.')
     hold on
     plot(y(:,1),y(:,2),'r*')
+    legend('Original','Codebook')
 end
 
 %% Load Encoding Audio
 % audio file 
-% [x,F,Nx,maxX] = loadaudio(70);
+% NEnc = 70; [x,F,Nx,maxX] = loadaudio(NEnc);
 
 % music
-% [x,F,Nx,~] = loadaudio(1,'music\SayNada.wav');
-% [x,F,Nx,~] = loadaudio(1,'music\Good4U.wav');
-[x,F,Nx,~] = loadaudio(1,'music\WaitingOnAWar.wav');
+% [x,F,Nx,~] = loadaudio(1,'music\SayNada.wav'); NEnc = 200;
+[x,F,Nx,~] = loadaudio(1,'music\Good4U.wav'); NEnc = 210;
+% [x,F,Nx,~] = loadaudio(1,'music\WaitingOnAWar.wav'); NEnc = 220;
+
 % x = x(round(0.25*Nx):round(0.30*Nx));
 % Nx = length(x);
 % maxX = max(x);
+
+savepic = ['Results\cb_' num2str(L)  '_' num2str(R) '_' num2str(epsilon) '_' num2str(Naud) '\Enc' num2str(NEnc) '\'];
+mkdir(savepic(1:end-1))
+f = gcf;
+exportgraphics(f,[savepic '1.png'])
 
 %% Encode
 tic
@@ -123,13 +129,16 @@ figure(2)
 plot(x1(:,1),x1(:,2),'g.')
 hold on
 plot(x2(:,1),x2(:,2),'r*')
+legend('Original','Codebook')
+f = gcf;
+exportgraphics(f,[savepic '2.png'])
 
 
 %% Decode
 x_end = int16(zeros(Nx,1)); 
 
 idxT = 1;
-for i = 1:L:Nx
+for i = 1:L:Nx-L
     for j = 1:L
          x_end(i+j-1) = x2(idxT,j);
     end
@@ -140,20 +149,26 @@ end
 
 figure(3)
 plot(abs(x_end(1:Nx)-x))
+f = gcf;
+exportgraphics(f,[savepic '3.png'])
 
-sound(single(x)/(2^nbit),F); % original signal
+% sound(single(x)/(2^nbit),F); % original signal
 figure(4);
 plot(x(150000:160000,:),'g-');
 hold on
-disp('Press any key to continue');
-pause;
-clear sound % Added to stop sound playing
+% disp('Press any key to continue');
+% pause;
+% clear sound % Added to stop sound playing
 
-sound(single(x_end)/(2^nbit),F); % original signal
+% sound(single(x_end)/(2^nbit),F); % encoded signal
 plot(x_end(150000:160000,:),'r-');
-disp('Press any key to continue');
-pause;
-clear sound % Added to stop sound playing
+% disp('Press any key to continue');
+% pause;
+% clear sound % Added to stop sound playing
+legend('Original','Encoded')
+f = gcf;
+exportgraphics(f,[savepic '4.png'])
+disp('Saving Plots DONE')
 
 %% Functions
 
@@ -228,7 +243,7 @@ function [x2,address, D] = quantizer(x1,b,L,K)
     cards = int16(zeros(K,1));
     D = 0;
     for i=1:N
-        if mod(i,50000) == 0
+        if mod(i,round(N/4)) == 0 % only show 4 times
             fprintf('Quantizier on index %d/%d\n',i,N)
         end
         mindist = inf;
