@@ -45,7 +45,7 @@ Naud = 100;
 
 % music
 % Naud = 200;
-% [x,F,Nx,maxX] = loadaudio(1,'music\saynada.wav');
+% [x,F,Nx,maxX] = loadaudio(1,'music\SayNada.wav');
 % x = x(round(0.25*Nx):round(0.30*Nx));
 
 iL = 2;
@@ -55,7 +55,7 @@ epsilon = 1e-2;
 
 savefile = ['CodeBooks\cb_' num2str(L)  '_' num2str(R) '_' num2str(epsilon) '_' num2str(Naud) '.mat'];
 if isfile(savefile)
-    disp('Codebook loaded from file.')
+    fprintf('Codebook loaded from file %s\n',savefile)
     load(savefile)
 else
     % Training set 
@@ -102,8 +102,10 @@ for i = 1:L:Nx
     idxT = idxT + 1;
 end
 tic
-[x2,ads] = quantizer(x1,y,L,K);
+[x2,ads,D] = quantizer(x1,y,L,K);
 toc
+
+fprintf('Audio Encoded with D = %d\n', D);
 figure(2)
 plot(x1(:,1),x1(:,2),'g.')
 hold on
@@ -169,7 +171,7 @@ function b = LBG(T,b1,epsilon)
             mindist = inf;
             min_idx = 1;
             for j = 1:K
-                dist = norm((T(i,:)-y(j,:)));
+                dist = norm(T(i,:)-y(j,:))^2;
                 if dist < mindist
                     mindist = dist;
                     min_idx = j;
@@ -207,19 +209,20 @@ function b = LBG(T,b1,epsilon)
 end
 
 
-function [x2,address] = quantizer(x1,b,L,K)
+function [x2,address, D] = quantizer(x1,b,L,K)
     N = length(x1(:,1));
     x2 = zeros(N,L);
     address = int16(zeros(N,1));
     cards = int16(zeros(K,1));
+    D = 0;
     for i=1:N
-        if mod(i,30000) == 0
+        if mod(i,50000) == 0
             fprintf('Quantizier on index %d/%d\n',i,N)
         end
         mindist = inf;
         min_idx = 1;
         for j = 1:K
-            dist = norm((x1(i,:)-b(j,:)));
+            dist = norm((x1(i,:)-b(j,:)))^2;
             if dist < mindist
                 mindist = dist;
                 min_idx = j;
@@ -228,7 +231,9 @@ function [x2,address] = quantizer(x1,b,L,K)
         cards(min_idx) = cards(min_idx) + 1;
         address(i) = min_idx;
         x2(i,:) = b(min_idx,:);
+        D = D + mindist;
     end
+    D = D/N;
       
 end
 
