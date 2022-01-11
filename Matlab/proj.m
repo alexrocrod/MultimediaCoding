@@ -16,7 +16,7 @@ clear all
 
 %% Parameters
 epsilon = 1e-2;
-L = 4; % 2 or 4
+L = 2; % 2 or 4
 iL = 2; % index to identify the rate selected
 
 if L == 2
@@ -39,12 +39,12 @@ nbit = 16;
 % [x,F,Nx,maxX] = loadaudio(Naud);
 
 % All files together
-Naud = 100;
-[x,F,Nx,maxX] = loadAllAudio();
+% Naud = 100;
+% [x,F,Nx,maxX] = loadAllAudio();
 
 % music
-% Naud = 200;
-% [x,F,Nx,maxX] = loadaudio(1,'music\SayNada.wav');
+Naud = 200;
+[x,F,Nx,maxX] = loadaudio(1,'music\SayNada.wav');
 % x = x(round(0.25*Nx):round(0.30*Nx));
 
 % music2
@@ -98,8 +98,9 @@ end
 
 % music
 % [x,F,Nx,~] = loadaudio(1,'music\SayNada.wav'); NEnc = 200;
-[x,F,Nx,~] = loadaudio(1,'music\Good4U.wav'); NEnc = 210;
+% [x,F,Nx,~] = loadaudio(1,'music\Good4U.wav'); NEnc = 210;
 % [x,F,Nx,~] = loadaudio(1,'music\WaitingOnAWar.wav'); NEnc = 220;
+[x,F,Nx,~] = loadaudio(1,'music\ForeverAfterAll.wav'); NEnc = 230;
 
 % x = x(round(0.25*Nx):round(0.30*Nx));
 % Nx = length(x);
