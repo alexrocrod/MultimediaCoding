@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.10) (preloaded format=pdflatex 2021.11.8)  10 JAN 2022 11:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (MiKTeX 21.10) (preloaded format=pdflatex 2021.11.8)  11 JAN 2022 18:11
 entering extended mode
 **./relatorio.tex
 (relatorio.tex
@@ -261,12 +261,12 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 22.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 21.
 
  (C:\Users\xandr\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 22.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 21.
 
 
 (C:\Users\xandr\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -274,23 +274,30 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 [1
 
-{C:/Users/xandr/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
+{C:/Users/xandr/AppData/Local/MiKTeX/pdftex/config/pdftex.map}] [2]
 (relatorio.aux) ) 
 Here is how much of TeX's memory you used:
- 4295 strings out of 478907
- 67403 string characters out of 2851892
- 363317 words of memory out of 3000000
- 22143 multiletter control sequences out of 15000+600000
- 408674 words of font info for 47 fonts, out of 8000000 for 9000
+ 4317 strings out of 478907
+ 67752 string characters out of 2851892
+ 376349 words of memory out of 3000000
+ 22163 multiletter control sequences out of 15000+600000
+ 411142 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,7n,66p,249b,243s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 57i,11n,66p,249b,288s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/publ
-ic/amsfonts/cm/cmr10.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/amsfonts/cm/cmr12.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/
-fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on relatorio.pdf (1 page, 39047 bytes).
+ic/amsfonts/cm/cmbx10.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/t
+ype1/public/amsfonts/cm/cmbx12.pfb><C:/Users/xandr/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/xandr/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Users/xandr/AppData/Loc
+al/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/xandr/App
+Data/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/x
+andr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:
+/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.
+pfb><C:/Users/xandr/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/c
+m/cmsy10.pfb>
+Output written on relatorio.pdf (2 pages, 122110 bytes).
 PDF statistics:
- 21 PDF objects out of 1000 (max. 8388607)
+ 54 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
