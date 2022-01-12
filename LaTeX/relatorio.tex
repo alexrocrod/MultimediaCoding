@@ -21,9 +21,9 @@
 	\maketitle
 	
 	\section{Introduction}
-		This reports is dedicated to explain the usage of the LBG-split algorithm and how to implement it.
-		The Linde-Buzo-Gray algorithm is a lossy coding technique, it uses vector quantization, meaning that a block of input samples (size L) is processed together.
-		$\ldots$
+		This report is dedicated to explain the usage of the LBG-split algorithm and how to implement it.
+		The Linde-Buzo-Gray algorithm is a lossy coding technique that uses vector quantization, meaning that a block of input samples is processed together.
+		We will understand what affects the final signal to noise ratio: codevector length L, rate R, training set used, etc..
 	
 	\section{Technical Approach}
 		Each vector of size L samples can be defined as
@@ -40,9 +40,21 @@
 		\begin{equation}
 			I_i \in R^L, i = 1, 2, \ldots, K, such that I_i intersect I_j = 0 \aleph i \neq j and union k i=1 I_i = R^L
 		\end{equation} 
-	
+		
+		The quantization procedure aims to minimize the distortion D, defined as 
+		\begin{equation}
+			D = E [||x-Q(x)||^2],
+		\end{equation} 
+		where $ Q(x) = y_i $ maps the input vector $ x $ to $y_i \in B$ when $x \in I_i $.
+		The bitrate $R$ is the number of bits used to quantize each component of the codevector
+		\begin{equation}
+			R = \frac{1}{L}log_2K,
+			\label{eq:rate}
+		\end{equation} 
+		where K is the codebook size, in this case a power of 2.
+			
 		\subsection{LBG}
-			Since we do not know the probablity distributuion function of the input data $ f_x(x) $ we can use a training set
+			Since we do not know the probability distribution function of the input data $ f_x(x) $ we can use a training set
 			\begin{equation}
 				T = {x_1,\ldots,x_N}
 			\end{equation},
@@ -88,10 +100,10 @@
 				\caption{Scenarios}
 				\label{table:Scenarios}
 			\end{table}
-		where K is the codebook size
-		\begin{equation}
-			K = 2^{RL}.
-		\end{equation} 
+			where K is the codebook size, from equation \ref{eq:rate},
+			\begin{equation}
+				K = 2^{RL}.
+			\end{equation} 
 		
 		
 		\subsection{Training Sets}
@@ -218,11 +230,13 @@
 		The All Audio training set is clearly superior in SNR.
 		
 		\subsection{Choosing a Training Set}
-			1- Training Time -> Mostly dependent on the amount of data we get the training set from, best: AllAudio.
-			2 - Training Distortion -> $ D_{SayN} \approxeq 2 D_{A+M} \approxeq 5 D_{Audio} $.
-			3 - Encoding Time -> No significant differences
-			4 - Encoding Distortion -> $  D_{Audio} > D_{SayNada} > D_{A+M} $
-			5 - Final SNR -> $  SNR_{A+M} < SNR_{SayNada} < SNR_{Audio} $
+			\begin{enumerate}
+				\item Training Time: Mostly dependent on the amount of data we get the training set from, best: AllAudio.
+				\item Training Distortion: $ D_{SayN} \approxeq 2 D_{A+M} \approxeq 5 D_{Audio} $.
+				\item Encoding Time: No significant differences
+				\item Encoding Distortion: $  D_{Audio} > D_{SayNada} > D_{A+M} $
+				\item Final SNR: $  SNR_{A+M} < SNR_{SayNada} < SNR_{Audio} $
+			\end{enumerate}
 			
 			We can although disregard training time due to being a one time only computation.
 			For a fast usage we would choose the All Audio training set.
@@ -230,21 +244,12 @@
 			
 	
 	\section{Conclusions}
-	
-		1 - Using music as a training set is clearly superior when we will use the codebook to encode music files.
-			Vice-versa is also valid, although less significantly. Encoding 70mono using All audio as training set produces in average half the distortion.
-		
-		2 - The best scenario and training set combination regarding SNR is L=2, R=2, All Audio and Music. This combination is also the slowest to encode.
-		
-		3 - Encoding Time is proportional to the rate R and the audio file duration.
-		
-		4 - Final SNR depends on the codebook size K but has a negative effect when increasing the codevector length L.
-		
-		
-		
-		
-		
-		
+		\begin{itemize}
+			\item Using music as a training set is clearly superior when we will use the codebook to encode music files. Vice-versa is also valid, although less significantly. Encoding 70mono using All audio as training set produces in average half the distortion.
+			\item The best scenario and training set combination regarding SNR is L=2, R=2, All Audio and Music. This combination is also the slowest to encode.
+			\item Encoding Time is proportional to the rate R and the audio file duration.
+			\item Final SNR depends on the codebook size K but has a negative effect when increasing the codevector length L. The rule of thumb $D \approx 6R$ applies when $ L =2 $. For$  L=4 $, $ SNR_{R=1} = 11.25 > 6 $ and $ SNR_{R=2} = 19.19 > 12 $.
+		\end{itemize}	
 		
 		
 \end{document}
