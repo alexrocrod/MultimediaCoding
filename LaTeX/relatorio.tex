@@ -45,6 +45,23 @@
 	\section{Results}
 		There were several tests made to fully understand the performance of this method.
 		
+		There 3 different trainng sets used:
+			1- All audio files from MC dataset
+			2- Only the Say Nada song
+			3- All Audio Files and All Popular Music
+			
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{c|c|c}
+				\textbf{Training set} & \textbf{N/K for L = 2} 	& \textbf{N/K for L = 4} \\ \hline
+				All Audio 			& $ 1250 $ 					& $ 625 $	 			 \\ \hline
+				Say Nada			& $ 1000 $ 				  	& $ 500 $ \\ \hline	
+				All Music and Audio & $ 4844 $					& $	2422 $ \\
+			\end{tabular}
+			\caption{Training sets and their stats}
+			\label{table:TrainSets}
+		\end{table}
+		
 		\subsection{Training Performance}
 		
 			The tests were made using $ \epsilon = 0.01 $.
