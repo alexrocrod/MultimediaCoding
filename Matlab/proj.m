@@ -17,7 +17,7 @@ clear all
 %% Parameters
 epsilon = 1e-2;
 L = 2; % 2 or 4
-iL = 2; % index to identify the rate selected
+iL = 1; % index to identify the rate selected
 
 if L == 2
     Rs = [2, 4];
@@ -39,19 +39,19 @@ nbit = 16;
 % [x,F,Nx,maxX] = loadaudio(Naud);
 
 % All files together
-% Naud = 100;
-% [x,F,Nx,maxX] = loadAllAudio();
+% [x,F,Nx,maxX] = loadAllAudio(); Naud = 100;
 
 % music
-Naud = 200;
-[x,F,Nx,maxX] = loadaudio(1,'music\SayNada.wav');
-% x = x(round(0.25*Nx):round(0.30*Nx));
+% [x,F,Nx,maxX] = loadaudio(1,'music\SayNada.wav'); Naud = 200;
 
+% All audio and music
+[x,F,Nx,maxX] = loadAllAudioMusic(); Naud = 300;
+
+% x = x(round(0.25*Nx):round(0.30*Nx));
 % music2
 % Naud = 210;
 % [x,F,Nx,maxX] = loadaudio(1,'music\Good4U.wav');
 % x = x(round(0.25*Nx):round(0.30*Nx));
-
 % music3
 % Naud = 220;
 % [x,F,Nx,maxX] = loadaudio(1,'music\WaitingOnAWar.wav');
@@ -98,9 +98,12 @@ end
 
 % music
 % [x,F,Nx,~] = loadaudio(1,'music\SayNada.wav'); NEnc = 200;
-% [x,F,Nx,~] = loadaudio(1,'music\Good4U.wav'); NEnc = 210;
+[x,F,Nx,~] = loadaudio(1,'music\Good4U.wav'); NEnc = 210;
 % [x,F,Nx,~] = loadaudio(1,'music\WaitingOnAWar.wav'); NEnc = 220;
-[x,F,Nx,~] = loadaudio(1,'music\ForeverAfterAll.wav'); NEnc = 230;
+% [x,F,Nx,~] = loadaudio(1,'music\ForeverAfterAll.wav'); NEnc = 230;
+% [x,F,Nx,~] = loadaudio(1,'music\SummerThing.wav'); NEnc = 240;
+% [x,F,Nx,~] = loadaudio(1,'music\TodoDeTi.wav'); NEnc = 250;
+% [x,F,Nx,~] = loadaudio(1,'music\TooOfficial.wav'); NEnc = 260;
 
 % x = x(round(0.25*Nx):round(0.30*Nx));
 % Nx = length(x);
@@ -272,18 +275,18 @@ function [x,F,Nx,maxX] = loadaudio(Naud,file)
     end
     info = audioinfo(filename);
     [x,F] = audioread(filename,'native') ; 
-    fprintf('Sampling frequency:  F = %d [Hz] \n',F); 
-    fprintf('Resolution:          nbits = %d [bit] \n',info.BitsPerSample);
+%     fprintf('Sampling frequency:  F = %d [Hz] \n',F); 
+%     fprintf('Resolution:          nbits = %d [bit] \n',info.BitsPerSample);
     
     % Upscale to 16 bit/sample
     if info.BitsPerSample == 8
-        disp('Upscaled to 16 bit/sample')
+%         disp('Upscaled to 16 bit/sample')
         x = int16(x) - 127;
     end
     
     % Convert to mono
     if info.NumChannels == 2
-        disp('Converted to Mono')
+%         disp('Converted to Mono')
         x = int16(mean(x,2));
     end
     Nx = length(x);
@@ -295,6 +298,18 @@ function [x,F,Nx,maxX]  = loadAllAudio()
     [x,F,~,~] = loadaudio(49);
     for Naud=Nauds
         [xi,~,~,~] = loadaudio(Naud);
+        x = [x; xi];
+    end
+    Nx = length(x);
+    maxX = max(x);
+end
+
+function [x,F,Nx,maxX]  = loadAllAudioMusic()
+    [x,F,~,~] = loadAllAudio();
+    musics = {'music\SayNada.wav'; 'music\Good4U.wav'; 'music\WaitingOnAWar.wav'; 
+     'music\ForeverAfterAll.wav'; 'music\SummerThing.wav'; 'music\TodoDeTi.wav'; 'music\TooOfficial.wav'};
+    for i=1:7
+        [xi,~,~,~] = loadaudio(1,musics{i});
         x = [x; xi];
     end
     Nx = length(x);
