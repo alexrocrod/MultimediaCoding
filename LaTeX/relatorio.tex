@@ -128,8 +128,8 @@
 				\begin{tabular}{c|c|c|c|c}
 					\textbf{Training set} & \textbf{2,2} 			& \textbf{2,4}			&  \textbf{4,1}				& \textbf{4,2} \\ \hline
 					All Audio 			& $ 1.51 \times 10^{5} $ 	& $ 3.53 \times 10^{5} $& $4.48 \times 10^{5} $ 	& $ 3.15 \times 10^{6} $ \\ \hline
-					Music: Say Nada		& $ 4.36 \times 10^{6} $ 	& $ ?? \times 10^{6} $	& $ 3.31 \times 10^{7} $  	& $ ??\times 10^{7} $ \\ \hline
-					All Music and Audio & $ 2.47 \times 10^{6} $	& $	?? \times 10^{6}$	& $ 9.70 \times 10^{6} $	& $	?? \times 10^{7} $ \\
+					Music: Say Nada		& $ 4.36 \times 10^{6} $ 	& $ 3.71 \times 10^{6} $& $ 3.31 \times 10^{7} $  	& $ 2.70 \times 10^{7} $ \\ \hline
+					All Music and Audio & $ 2.47 \times 10^{6} $	& $	1.93 \times 10^{6}$	& $ 9.70 \times 10^{6} $	& $	1.42 \times 10^{7} $ \\
 				\end{tabular}
 				\caption{Distortion for each training set and each values of L and R}
 				\label{table:TrainDist}
@@ -140,8 +140,8 @@
 				\begin{tabular}{c|c|c|c|c}
 					\textbf{Training set}	 	& \textbf{2,2} & \textbf{2,4}	& \textbf{4,1} & \textbf{4,2}\\ \hline
 					All Audio 					& $ 1.29 s $ 	& $ 179.09 s $	& $ 0.45 s $ 	& $ 86.02 5 s $	\\ \hline
-					Music: Say Nada				& $ 0.75 s $	& $  s $	& $ 0.47 s $ 	& $  s $	\\ \hline
-					All Music and All Audio 	& $ 2.57 s $	& $	?? $		& $ 1.21 s $	& $	?? $		\\
+					Music: Say Nada				& $ 0.75 s $	& $ 114.41 s $	& $ 0.47 s $ 	& $ 55.81 s $	\\ \hline
+					All Music and All Audio 	& $ 2.57 s $	& $	556.13 s $	& $ 1.21 s $	& $	266.74 s $	\\
 				\end{tabular}
 				\caption{Time for each training set and each values of L and R}
 				\label{table:TrainTime}
@@ -158,33 +158,62 @@
 				\centering
 				\begin{tabular}{c|c|c|c|c}
 					\textbf{Encoded}	& \textbf{2,2} 	& \textbf{2,4}	& \textbf{4,1} & \textbf{4,2}\\ \hline
-					70mono					& $ 1.20 s $ 	& $ 16.79 s $	& $ 0.60 s $ 	& $ 8.70 5 s $	\\ \hline
-					Average Music			& $ 13.40 s $	& $ 193.61 s $	& $ 6.66 s $ 	& $ 104.92 s $	\\ \hline	
-					Worst Case				& $ 18.40 s $	& $	232.67 s $	& $ 8.22 s $	& $	118.26 s $	\\ \hline
-					Best Case				& $ 10.89 s $	& $	149.41 s $	& $ 5.52 s $	& $	91.04 s $	\\
+					70mono					& $ 1.45 s $ 	& $  s $	& $ 0.75 s $ 	& $  5 s $	\\ \hline
+					Average Music			& $ 13.44 s $	& $  s $	& $ 6.78 s $ 	& $  s $	\\ \hline	
+					Worst Case				& $ 18.02 s $	& $	 s $	& $ 8.24 s $	& $	 s $	\\ \hline
+					Best Case				& $ 9.00 s $	& $	 s $	& $ 4.63 s $	& $	 s $	\\
 				\end{tabular}
-				\caption{Time for each training set and each values of L and R}
+				\caption{Time for each encoding object and each values of L and R}
 				\label{table:EncodeTime}
 			\end{table}
-			There is no noticeable difference when using All Audio or Say Nada as the training set.
+			There is no noticeable difference between using the different training sets.
 			
 			\begin{table}[H]
 				\centering
 				\begin{tabular}{c|c|c|c|c}
-					\textbf{Encoded} & \textbf{2,2} 			& \textbf{2,4}			&  \textbf{4,1}				& \textbf{4,2} \\ \hline
-					70mono			& $ 5 \times 10^{5} $ 		& $ 2 \times 10^{4} $	& $4.75 \times 10^{5} $ 	& $ 8 \times 10^{4} $ \\ \hline
-					Average Music	& $ 3.72 \times 10^{6} $ 	& $ 5.77 \times 10^{5} $& $ 4.66 \times 10^{6} $  	& $ 8.45 \times 10^{5} $ \\ \hline	
-					Worst Case 		& $ 1.15 \times 10^{7} $	& $	8.20 \times 10^{5} $& $ 1.36 \times 10^{7} $	& $ 2.74 \times 10^6 $ \\ \hline
-					Best Case 		& $ 6.2 \times 10^{5} $		& $	3.10 \times 10^{4} $& $ 9.42 \times 10^{5} $ 	& $	1.07 \times 10^5 $ \\
+					\textbf{Encoded} & \textbf{2,2} 			& \textbf{2,4}		&  \textbf{4,1}				& \textbf{4,2} \\ \hline
+					70mono			& $ 2.5 \times 10^{5} $ 	& $  \times 10^{} $	& $6.10 \times 10^{5} $ 	& $  \times 10^{} $ \\ \hline
+					Average Music	& $ 3.40 \times 10^{6} $ 	& $  \times 10^{} $& $ 4.38 \times 10^{6} $  	& $  \times 10^{} $ \\ \hline	
+					Worst Case 		& $ 1.53 \times 10^{7} $	& $	 \times 10^{} $& $ 1.51 \times 10^{7} $		& $  \times 10^ $ \\ \hline
+					Best Case 		& $ 3.66 \times 10^{5} $	& $  \times 10^{} $& $ 6.90 \times 10^{5} $ 	& $	 \times 10^ $ \\
 				\end{tabular}
-				\caption{Distortion for each training set and each values of L and R}
+				\caption{Distortion for each encoding object and each values of L and R}
 				\label{table:EncodeDist}
 			\end{table}
 		
 			
-			Encoding music files using All Audio as training se gives us in average 4 times the distortion when using Say Nada as the training set.
+			Encoding music files using All Audio as training se gives us in average 3 times the distortion when using Say Nada as the training set.
+			When using Audio and Music as the training set we got half the distortion compared to using Say Nada.
 			For (2,4) we get actually 11 times the distortion.
 			
+			
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{c|c|c|c|c}
+					\textbf{Encoded} 	& \textbf{2,2} 	& \textbf{2,4}	& \textbf{4,1}	& \textbf{4,2} \\ \hline
+					70mono				& $ 12.55 $ 	& $   $			& $ 10.10 $		& $  $ 		\\ \hline
+					Average Music		& $ 13.83 $ 	& $   $			& $ 11.80 $  	& $  $ 		\\ \hline	
+					Worst Case 			& $ 17.01 $		& $	  $			& $ 16.60 $		& $   $ 	\\ \hline
+					Best Case 			& $ 8.74 $		& $   $			& $ 8.00 $ 		& $	  $ 	\\
+				\end{tabular}
+				\caption{SNR(dB) for each encoding object and each values of L and R}
+				\label{table:EncodeSNR}
+			\end{table}
+		
+		Regarding Signal to Noise Ratio (SNR) in dB, there are significant differences regarding the training set used.
+		
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{c|c|c|c|c}
+				\textbf{Encoded} 			& \textbf{2,2} 	& \textbf{2,4}	& \textbf{4,1}	& \textbf{4,2} \\ \hline
+				All Audio 					& $ 10.35 $ 	& $ 20.31 $		& $ 9.66 $ 		& $ 17.25 $	\\ \hline
+				Music: Say Nada				& $ 14.15 $		& $ 26.63 $		& $ 11.57 $ 	& $ 20.74 $	\\ \hline
+				All Music and All Audio 	& $ 16.98 $		& $	27.06 $		& $ 14.17 $		& $	21.05 $	\\
+			\end{tabular}
+			\caption{Average SNR(dB) for each training set and each values of L and R}
+			\label{table:EncodeSNRT}
+		\end{table}
+		
 		
 		\subsection{Training set including the encoding object...}
 			
