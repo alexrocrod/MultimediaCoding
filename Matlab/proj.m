@@ -16,7 +16,7 @@ clear all
 
 %% Parameters
 epsilon = 1e-2;
-L = 2; % 2 or 4
+L = 4; % 2 or 4
 iL = 2; % index to identify the rate selected
 
 if L == 2
@@ -88,16 +88,17 @@ end
 
 %% Load Encoding Audio
 % audio file 
-% NEnc = 70; [x,F,Nx,maxX] = loadaudio(NEnc);
+NEnc = 70; [x,F,Nx,maxX] = loadaudio(NEnc);
 
 % music
-[x,F,Nx,~] = loadaudio(1,'music\SayNada.wav'); NEnc = 200;
+% [x,F,Nx,~] = loadaudio(1,'music\SayNada.wav'); NEnc = 200;
 % [x,F,Nx,~] = loadaudio(1,'music\Good4U.wav'); NEnc = 210;
 % [x,F,Nx,~] = loadaudio(1,'music\WaitingOnAWar.wav'); NEnc = 220;
 % [x,F,Nx,~] = loadaudio(1,'music\ForeverAfterAll.wav'); NEnc = 230;
 % [x,F,Nx,~] = loadaudio(1,'music\SummerThing.wav'); NEnc = 240;
 % [x,F,Nx,~] = loadaudio(1,'music\TodoDeTi.wav'); NEnc = 250;
 % [x,F,Nx,~] = loadaudio(1,'music\TooOfficial.wav'); NEnc = 260;
+% var(double(x))
 
 savepic = ['Results\cb_' num2str(L)  '_' num2str(R) '_' num2str(epsilon) '_' num2str(Naud) '\Enc' num2str(NEnc) '\'];
 mkdir(savepic(1:end-1))

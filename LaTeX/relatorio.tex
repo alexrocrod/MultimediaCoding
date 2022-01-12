@@ -40,28 +40,86 @@
 		\begin{equation}
 			I_i \in R^L, i = 1, 2, \ldots, K, such that I_i intersect I_j = 0 \aleph i \neq j and union k i=1 I_i = R^L
 		\end{equation} 
+	
+		\subsection{LBG}
+			Since we do not know the probablity distributuion function of the input data $ f_x(x) $ we can use a training set
+			\begin{equation}
+				T = {x_1,\ldots,x_N}
+			\end{equation},
+			where $N$ should be considerably larger than the codebook size $ K $,$  N \le 500K $ for this work.
+			
+			The algorithm can then be defined as:
+			\begin{enumerate}
+				\item initial codebook
+				\item optimal partition
+				\item new codebook
+				\item distortion
+				\item terminate?
+			\end{enumerate}
+		
+		\subsection{Split approach}
+				This approach is based on starting a codebook as 
+				\begin{equation}
+					\{(1-\epsilon)y_{avg}, (1+\epsilon)y_{avg}\},
+				\end{equation}
+				where $ y_{avg} $ is the average of the vectors in the training set.
+				The LBG algorithm is then applied to this codebook.
+				The returning optimized codebook is split in the same way, i.e.
+				\begin{equation}
+					\{(1-\epsilon)y_i, (1+\epsilon)y_i, \ldots, (1-\epsilon)y_N, (1+\epsilon)y_N \}, 
+				\end{equation}
+				This implies that the codebook size will double in each iteration until we get the desired size K, $ N=2,4,8, \ldots,K $.			
 		
 	
 	\section{Results}
 		There were several tests made to fully understand the performance of this method.
 		
-		There 3 different trainng sets used:
-			1- All audio files from MC dataset
-			2- Only the Say Nada song
-			3- All Audio Files and All Popular Music
-			
-		\begin{table}[H]
-			\centering
-			\begin{tabular}{c|c|c}
-				\textbf{Training set} & \textbf{N/K for L = 2} 	& \textbf{N/K for L = 4} \\ \hline
-				All Audio 			& $ 1250 $ 					& $ 625 $	 			 \\ \hline
-				Say Nada			& $ 1000 $ 				  	& $ 500 $ \\ \hline	
-				All Music and Audio & $ 4844 $					& $	2422 $ \\
-			\end{tabular}
-			\caption{Training sets and their stats}
-			\label{table:TrainSets}
-		\end{table}
+		\subsection{Important Parameters}
+			As required there are 4 scenrarios
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{c|c|c}
+					\textbf{L} 		& \textbf{R} 	& \textbf{K} 	\\ \hline
+					$ 2 $			& $ 2 $ 		& $ 16 $	  	\\ \hline
+					$ 2 $			& $ 4 $ 	  	& $ 256 $ 		\\ \hline	
+					$ 4 $			& $ 1 $ 		& $ 16 $ 		\\ \hline	
+					$ 4 $			& $ 2 $			& $	256 $ 		\\
+				\end{tabular}
+				\caption{Scenarios}
+				\label{table:Scenarios}
+			\end{table}
+		where K is the codebook size
+		\begin{equation}
+			K = 2^{RL}.
+		\end{equation} 
 		
+		
+		\subsection{Training Sets}
+			There 3 different trainng sets used:
+			\begin{itemize}
+				\item All audio files from MC dataset
+				\item Only the Say Nada song
+				\item All Audio Files and All Popular Music
+			\end{itemize}
+				
+			Each training set was limited in size. 
+			For each file I extracted the middle part to result in the following relative size (N/K).
+				
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{c|c|c}
+					\textbf{Training set} & \textbf{N/K for L = 2} 	& \textbf{N/K for L = 4} \\ \hline
+					All Audio 			& $ 1250 $ 					& $ 625 $	 			 \\ \hline
+					Say Nada			& $ 1000 $ 				  	& $ 500 $ \\ \hline	
+					All Music and Audio & $ 4844 $					& $	2422 $ \\
+				\end{tabular}
+				\caption{Relative Sizes of each Training Set}
+				\label{table:TrainSets}
+			\end{table}
+			
+			These sizes allowed fast enough codebook computation.
+			Having training sets with and without including the encoding objects will benefit our comparison and possible conclusions.
+				
 		\subsection{Training Performance}
 		
 			The tests were made using $ \epsilon = 0.01 $.
@@ -69,10 +127,9 @@
 				\centering
 				\begin{tabular}{c|c|c|c|c}
 					\textbf{Training set} & \textbf{2,2} 			& \textbf{2,4}			&  \textbf{4,1}				& \textbf{4,2} \\ \hline
-					All Audio 			& $ 1.77 \times 10^{5} $ 	& $ 2.12 \times 10^{5} $& $4.75 \times 10^{5} $ 	& $ 2.85 \times 10^{5} $ \\ \hline
-					Music: Say Nada		& $ 4.36 \times 10^{6} $ 	& $ 3.70 \times 10^{6} $& $ 1.63 \times 10^{7} $  	& $ 2.37 \times 10^{7} $ \\ \hline	
-					All Music 			& $ ?? $					& $	?? $				& $ ?? $					& $	?? $ \\ \hline
-					All Music and Audio & $ ?? $					& $	?? $				& $ ?? $					& $	?? $ \\
+					All Audio 			& $ 1.51 \times 10^{5} $ 	& $ 3.53 \times 10^{5} $& $4.48 \times 10^{5} $ 	& $ 3.15 \times 10^{6} $ \\ \hline
+					Music: Say Nada		& $ 4.36 \times 10^{6} $ 	& $ ?? \times 10^{6} $	& $ 3.31 \times 10^{7} $  	& $ ??\times 10^{7} $ \\ \hline
+					All Music and Audio & $ 2.47 \times 10^{6} $	& $	?? \times 10^{6}$	& $ 9.70 \times 10^{6} $	& $	?? \times 10^{7} $ \\
 				\end{tabular}
 				\caption{Distortion for each training set and each values of L and R}
 				\label{table:TrainDist}
@@ -82,10 +139,9 @@
 				\centering
 				\begin{tabular}{c|c|c|c|c}
 					\textbf{Training set}	 	& \textbf{2,2} & \textbf{2,4}	& \textbf{4,1} & \textbf{4,2}\\ \hline
-					All Audio 					& $ 0.45 s $ 	& $ 101.49 s $	& $ 0.32 s $ 	& $ 84.79 5 s $	\\ \hline
-					Music: Say Nada				& $ 0.73 s $	& $ 115.93 s $	& $ 0.39 s $ 	& $ 95.22 s $	\\ \hline	
-					All Music					& $ ?? $		& $	?? $		& $ ?? $		& $	?? $		\\ \hline
-					All Music and All Audio 	& $ ?? $		& $	?? $		& $ ?? $		& $	?? $		\\
+					All Audio 					& $ 1.29 s $ 	& $ 179.09 s $	& $ 0.45 s $ 	& $ 86.02 5 s $	\\ \hline
+					Music: Say Nada				& $ 0.75 s $	& $  s $	& $ 0.47 s $ 	& $  s $	\\ \hline
+					All Music and All Audio 	& $ 2.57 s $	& $	?? $		& $ 1.21 s $	& $	?? $		\\
 				\end{tabular}
 				\caption{Time for each training set and each values of L and R}
 				\label{table:TrainTime}
