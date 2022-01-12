@@ -152,49 +152,50 @@
 			The distortion is noticeably larger for L = 4.
 			
 		\subsection{Encoding Performance}
+			We will discuss performance regarding a music file form the DataSet (70mono.wav), various popular musics and a speech file from the DataSet (49mono.wav).
 			In summary I got the following results:
 			
 			\begin{table}[H]
 				\centering
 				\begin{tabular}{c|c|c|c|c}
 					\textbf{Encoded}	& \textbf{2,2} 	& \textbf{2,4}	& \textbf{4,1} & \textbf{4,2}\\ \hline
-					70mono					& $ 1.45 s $ 	& $  s $	& $ 0.75 s $ 	& $  5 s $	\\ \hline
-					Average Music			& $ 13.44 s $	& $  s $	& $ 6.78 s $ 	& $  s $	\\ \hline	
-					Worst Case				& $ 18.02 s $	& $	 s $	& $ 8.24 s $	& $	 s $	\\ \hline
-					Best Case				& $ 9.00 s $	& $	 s $	& $ 4.63 s $	& $	 s $	\\
+					Audio 70				& $ 1.50 s $ 	& $ 17.81 s $	& $ 0.74 s $ 	& $ 10.24 s $	\\ \hline
+					Average Music			& $ 13.44 s $	& $ 188.31 s $	& $ 6.78 s $ 	& $ 95.41 s $	\\ \hline	
+					Worst Case				& $ 18.02 s $	& $	137.08 s $	& $ 8.24 s $	& $	118.51 s $	\\ \hline
+					Best Case				& $ 9.00 s $	& $	253.91 s $	& $ 4.63 s $	& $	70.26 s $	\\ \hline
+					Audio 49				& $ 1.38 s $	& $	18.78 s $	& $ 0.79 s $	& $	9.73 s $	\\
 				\end{tabular}
 				\caption{Time for each encoding object and each values of L and R}
 				\label{table:EncodeTime}
 			\end{table}
 			There is no noticeable difference between using the different training sets.
+			The music files clearly take more time to encode, this can be mostly due to the duration of the audio clip being larger.
+			Both speech and music audio files from the dataset have similar encoding time due to their reduced duration.
 			
 			\begin{table}[H]
 				\centering
 				\begin{tabular}{c|c|c|c|c}
 					\textbf{Encoded} & \textbf{2,2} 			& \textbf{2,4}		&  \textbf{4,1}				& \textbf{4,2} \\ \hline
-					70mono			& $ 2.5 \times 10^{5} $ 	& $  \times 10^{} $	& $6.10 \times 10^{5} $ 	& $  \times 10^{} $ \\ \hline
-					Average Music	& $ 3.40 \times 10^{6} $ 	& $  \times 10^{} $& $ 4.38 \times 10^{6} $  	& $  \times 10^{} $ \\ \hline	
-					Worst Case 		& $ 1.53 \times 10^{7} $	& $	 \times 10^{} $& $ 1.51 \times 10^{7} $		& $  \times 10^ $ \\ \hline
-					Best Case 		& $ 3.66 \times 10^{5} $	& $  \times 10^{} $& $ 6.90 \times 10^{5} $ 	& $	 \times 10^ $ \\
+					70mono			& $ 2.94 \times 10^{5} $ 	& $ 2.81 \times 10^{4} $& $ 6.32 \times 10^{5} $ 	& $ 7.51 \times 10^{4} $ \\ \hline
+					Average Music	& $ 3.40 \times 10^{6} $ 	& $ 3.35 \times 10^{5} $& $ 4.38 \times 10^{6} $  	& $ 7.30 \times 10^{5} $ \\ \hline	
+					Worst Case 		& $ 1.53 \times 10^{7} $	& $	1.95 \times 10^{6} $& $ 1.51 \times 10^{7} $	& $ 2.85 \times 10^6 $ \\ \hline
+					Best Case 		& $ 3.66 \times 10^{5} $	& $ 2.21 \times 10^{4} $& $ 6.90 \times 10^{5} $ 	& $	1.99 \times 10^5 $ \\ \hline
+					Audio 49		& $ 3.42 \times 10^{5} $	& $ 3.48 \times 10^{4} $& $ 7.61 \times 10^{5} $ 	& $ 1.10 \times 10^{5} $	\\
 				\end{tabular}
 				\caption{Distortion for each encoding object and each values of L and R}
 				\label{table:EncodeDist}
-			\end{table}
-		
-			
-			Encoding music files using All Audio as training se gives us in average 3 times the distortion when using Say Nada as the training set.
-			When using Audio and Music as the training set we got half the distortion compared to using Say Nada.
-			For (2,4) we get actually 11 times the distortion.
-			
+			\end{table}		
+			Distortion is larger for the music files which can also be due to their larger duration.		
 			
 			\begin{table}[H]
 				\centering
 				\begin{tabular}{c|c|c|c|c}
 					\textbf{Encoded} 	& \textbf{2,2} 	& \textbf{2,4}	& \textbf{4,1}	& \textbf{4,2} \\ \hline
-					70mono				& $ 12.55 $ 	& $   $			& $ 10.10 $		& $  $ 		\\ \hline
-					Average Music		& $ 13.83 $ 	& $   $			& $ 11.80 $  	& $  $ 		\\ \hline	
-					Worst Case 			& $ 17.01 $		& $	  $			& $ 16.60 $		& $   $ 	\\ \hline
-					Best Case 			& $ 8.74 $		& $   $			& $ 8.00 $ 		& $	  $ 	\\
+					Audio 70			& $ 12.55 $ 	& $  23.17 $	& $ 10.10 $		& $ 18.33 $ 	\\ \hline
+					Average Music		& $ 13.83 $ 	& $  24.67  $	& $ 11.80 $  	& $ 19.68 $ 	\\ \hline	
+					Worst Case 			& $ 8.74 $		& $	 17.54 $	& $ 8.00 $		& $ 15.15  $ 	\\ \hline
+					Best Case 			& $ 17.01 $		& $ 27.86 $		& $ 16.60 $ 	& $	22.99  $ 	\\ \hline
+					Audio 49 			& $ 11.69 $		& $ 21.87  $	& $ 8.58 $ 		& $	16.64  $ 	\\
 				\end{tabular}
 				\caption{SNR(dB) for each encoding object and each values of L and R}
 				\label{table:EncodeSNR}
@@ -206,16 +207,26 @@
 			\centering
 			\begin{tabular}{c|c|c|c|c}
 				\textbf{Encoded} 			& \textbf{2,2} 	& \textbf{2,4}	& \textbf{4,1}	& \textbf{4,2} \\ \hline
-				All Audio 					& $ 10.35 $ 	& $ 20.31 $		& $ 9.66 $ 		& $ 17.25 $	\\ \hline
-				Music: Say Nada				& $ 14.15 $		& $ 26.63 $		& $ 11.57 $ 	& $ 20.74 $	\\ \hline
-				All Music and All Audio 	& $ 16.98 $		& $	27.06 $		& $ 14.17 $		& $	21.05 $	\\
+				All Audio 					& $ 11.26 $ 	& $ 21.45 $		& $ 10.24 $ 	& $ 17.79 $	\\ \hline
+				Music: Say Nada				& $ 13.22 $		& $ 25.01 $		& $ 10.21 $ 	& $ 19.57 $	\\ \hline
+				All Music and All Audio 	& $ 15.86 $		& $	26.11 $		& $ 13.31 $		& $	20.22 $	\\
 			\end{tabular}
 			\caption{Average SNR(dB) for each training set and each values of L and R}
 			\label{table:EncodeSNRT}
 		\end{table}
 		
+		The All Audio training set is clearly superior in SNR.
 		
-		\subsection{Training set including the encoding object...}
+		\subsection{Choosing a Training Set}
+			1- Training Time -> Mostly dependent on the amount of data we get the training set from, best: AllAudio.
+			2 - Training Distortion -> $ D_{SayN} \approxeq 2 D_{A+M} \approxeq 5 D_{Audio} $.
+			3 - Encoding Time -> No significant differences
+			4 - Encoding Distortion -> $  D_{Audio} > D_{SayNada} > D_{A+M} $
+			5 - Final SNR -> $  SNR_{A+M} < SNR_{SayNada} < SNR_{Audio} $
+			
+			We can although disregard training time due to being a one time only computation.
+			For a fast usage we would choose the All Audio training set.
+			To have the best SNR the clear choice is the biggest training set, i.e. the Audio and Music training set.
 			
 	
 	\section{Conclusions}
@@ -223,11 +234,13 @@
 		1 - Using music as a training set is clearly superior when we will use the codebook to encode music files.
 			Vice-versa is also valid, although less significantly. Encoding 70mono using All audio as training set produces in average half the distortion.
 		
-		2 - 
+		2 - The best scenario and training set combination regarding SNR is L=2, R=2, All Audio and Music. This combination is also the slowest to encode.
 		
-		3 - 
+		3 - Encoding Time is proportional to the rate R and the audio file duration.
 		
-		4 - 
+		4 - Final SNR depends on the codebook size K but has a negative effect when increasing the codevector length L.
+		
+		
 		
 		
 		

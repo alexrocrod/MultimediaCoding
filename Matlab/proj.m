@@ -20,7 +20,7 @@ epsilon = 1e-2;
 L = 2; % 2 or 4
 iL = 1; % index to identify the rate selected
 Naud = 100; % Training Set: 100- All Audio, 200- SayNada, 300- All Audio and Music
-NEnc = 70; % Encoding Object ID: [49,54,58,64,70] Audio, 200- SayNada,
+NEnc = 49; % Encoding Object ID: [49,54,58,64,70] Audio, 200- SayNada,
            % 210- Good4U, 220- WaitingOnAWar, 230- ForeverAfterAll, 
            % 240- SummerThing, 250- TodoDeTi, 260- TooOfficial
 
